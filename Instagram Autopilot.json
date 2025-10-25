@@ -1,0 +1,1150 @@
+{
+  "name": "Instagram Autopilot",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -88,
+        364
+      ],
+      "id": "ec4584bd-043a-4fd0-aaa8-7313b3da65cd",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "80UTZNl6CRSjgELp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-preview-image-generation",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-preview-image-generation"
+        },
+        "prompt": "=You are a professional graphic designer for Aspire Academy (@aspireacademyorg).\n\n\n\n\n\n\n\nCreate a visually appealing Instagram post for the topic: {{ $('Data Form').item.json.Topic }}\n\n\nPost Caption : {{ $json.output }}\n\n\n\nDesign Requirements:\n\n\n\n- Format: Instagram square (1:1 ratio), high resolution.\n\n\n\n- Theme: Educational and informative.\n\n\n\n- Color palette: Blue tones with white and light grey accents.\n\n\n\n- Layout:\n\n\n\n  - A bold headline at the top in large, clear, center-aligned text.\n\n\n\n  - A relevant image or vector illustration in the middle related to the topic.\n\n\n\n  - Supporting text or a short quote below the image in readable font size.\n\n\n\n  - Add the text \"@aspireacademyorg\" subtly at the bottom as branding.\n\n\n\n- Typography: Use modern sans-serif fonts, bold and high-contrast for titles, lighter for quotes.\n\n\n\n- Ensure perfect text alignment, proper spacing, and clear visual hierarchy.\n\n\n\n- Use vector graphics, abstract shapes, or minimal icons to make it visually engaging.\n\n\n\n- Avoid any watermarks, extra logos, or decorative clutter.\n\n\n\n- Maintain a professional, educational look suitable for an academic or motivational page.\n\n\n\n\n\n\n\nVisual Style Keywords: clean design, blue educational theme, bold typography, centered layout, vector-based, modern, professional, Instagram-ready.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        640,
+        720
+      ],
+      "id": "f2b31ba4-b698-4017-a123-e68a046fbd3f",
+      "name": "Generate an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "80UTZNl6CRSjgELp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "amanforsure@gmail.com",
+        "subject": "Aspire Academy Post Approval",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Post Approval</title>\n  <style>\n    body {\n      font-family: 'Segoe UI', Roboto, Arial, sans-serif;\n      background-color: #f5f7fa;\n      margin: 0;\n      padding: 0;\n    }\n    .container {\n      background-color: #ffffff;\n      max-width: 600px;\n      margin: 40px auto;\n      border-radius: 12px;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.08);\n      overflow: hidden;\n    }\n    .header {\n      background-color: #2b2d42;\n      color: #ffffff;\n      text-align: center;\n      padding: 20px 0;\n    }\n    .header h2 {\n      margin: 0;\n      font-size: 20px;\n      letter-spacing: 0.5px;\n    }\n    .content {\n      padding: 25px;\n      text-align: center;\n    }\n    .content img {\n      max-width: 100%;\n      border-radius: 8px;\n      margin-bottom: 20px;\n    }\n    .caption {\n      font-size: 16px;\n      color: #333;\n      margin-bottom: 30px;\n      line-height: 1.5;\n    }\n    .buttons {\n      display: flex;\n      justify-content: center;\n      gap: 20px;\n    }\n    .btn {\n      text-decoration: none;\n      color: #fff;\n      font-weight: 500;\n      padding: 12px 24px;\n      border-radius: 6px;\n      font-size: 15px;\n    }\n    .approve {\n      background-color: #00b894;\n    }\n    .reject {\n      background-color: #d63031;\n    }\n    .footer {\n      text-align: center;\n      font-size: 13px;\n      color: #999;\n      padding: 20px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h2>🪶 New Post Approval</h2>\n    </div>\n    <div class=\"content\">\n      <img src=\"{{ $json.url }}\" alt=\"Generated Post Image\" />\n      <p class=\"caption\">{{ $json.caption }}</p>\n    </div>\n  </div>\n</body>\n</html>\n",
+        "approvalOptions": {
+          "values": {
+            "approvalType": "double"
+          }
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        864,
+        -128
+      ],
+      "id": "02a8e4d0-f584-491e-b9df-deecfe4a9368",
+      "name": "Send message and wait for response",
+      "webhookId": "41cc5e86-f71b-48c1-82b0-d1f4c3700126",
+      "retryOnFail": false,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "xZeyCP3RP745PL0L",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "30940f44-e5c2-4d91-852d-65bdb5ba3d48",
+              "leftValue": "={{ $json.data.approved }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1088,
+        -128
+      ],
+      "id": "cfa2a239-95f1-4cfd-9661-1224c14ae09e",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "httpRequestMethod": "POST",
+        "graphApiVersion": "v23.0",
+        "node": "17841477484115471",
+        "edge": "media",
+        "options": {
+          "queryParameters": {
+            "parameter": [
+              {
+                "name": "image_url",
+                "value": "={{ $('Set Data for Mail1').item.json.url }}"
+              },
+              {
+                "name": "caption",
+                "value": "={{ $('Generate Caption').item.json.output }}"
+              }
+            ]
+          }
+        }
+      },
+      "type": "n8n-nodes-base.facebookGraphApi",
+      "typeVersion": 1,
+      "position": [
+        1312,
+        -128
+      ],
+      "id": "ea7d50a7-2d83-4dab-85e1-77f5d2f22211",
+      "name": "Facebook Graph API",
+      "credentials": {
+        "facebookGraphApi": {
+          "id": "tCSxe2xz6HpDhd5O",
+          "name": "Facebook Graph account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v23.0/17841477484115471/media_publish",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer EAA8NQNQB1wIBP0wGkfgRaJAaAy1BF1AuHpgbgMoI8PVjuy8DvEBY3c4hhv5nTZBjwIyrz0ZC3v4B3hA3kRY1tHl3cbbsQyDh0JBXIjPKbSynVJivOKePI9ZAUQZBnCQnUMLLhwYggsOlkOXn25CTdTxZBhD3go1Kjhuv2ZBLrH5NqegpUl3QZCzimYH46H0"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "creation_id",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1536,
+        -128
+      ],
+      "id": "801d32e5-dcbf-41a0-a0f4-df6b504dba94",
+      "name": "HTTP Request1",
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.0-flash-preview-image-generation",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.0-flash-preview-image-generation"
+        },
+        "prompt": "=You are a professional graphic designer for Aspire Academy (@aspireacademyorg).\n\n\n\n\n\n\n\nCreate a visually appealing Instagram post for the topic: {{ $('Data Form').item.json.Topic }}\n\n\nPost Caption : {{ $json.output }}\n\n\n\nDesign Requirements:\n\n\n\n- Format: Instagram square (1:1 ratio), high resolution.\n\n\n\n- Theme: Educational and informative.\n\n\n\n- Color palette: Blue tones with white and light grey accents.\n\n\n\n- Layout:\n\n\n\n  - A bold headline at the top in large, clear, center-aligned text.\n\n\n\n  - A relevant image or vector illustration in the middle related to the topic.\n\n\n\n  - Supporting text or a short quote below the image in readable font size.\n\n\n\n  - Add the text \"@aspireacademyorg\" subtly at the bottom as branding.\n\n\n\n- Typography: Use modern sans-serif fonts, bold and high-contrast for titles, lighter for quotes.\n\n\n\n- Ensure perfect text alignment, proper spacing, and clear visual hierarchy.\n\n\n\n- Use vector graphics, abstract shapes, or minimal icons to make it visually engaging.\n\n\n\n- Avoid any watermarks, extra logos, or decorative clutter.\n\n\n\n- Maintain a professional, educational look suitable for an academic or motivational page.\n\n\n\n\n\n\n\nVisual Style Keywords: clean design, blue educational theme, bold typography, centered layout, vector-based, modern, professional, Instagram-ready.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        640,
+        528
+      ],
+      "id": "85e7ff6d-f6c0-40bc-96fb-22f6a0f32bfe",
+      "name": "Generate an image1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "80UTZNl6CRSjgELp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "67ed9d9e-d199-4aa1-aa6c-9e204419dee6",
+              "leftValue": "={{ $('Data Form').item.json.Topic.toLowerCase() }}",
+              "rightValue": "how to",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "cb63cb4b-d81b-4f5a-881f-b549a26ed29c",
+              "leftValue": "={{ $('Data Form').item.json.Topic.toLowerCase() }}",
+              "rightValue": "learn",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "d173a08c-bcf8-411d-8c7d-4b8bf3557409",
+              "leftValue": "={{ $('Data Form').item.json.Topic.toLowerCase() }}",
+              "rightValue": "guide",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        288,
+        736
+      ],
+      "id": "6234c0e5-d031-4940-a8fc-96526711207c",
+      "name": "If3"
+    },
+    {
+      "parameters": {
+        "sendTo": "amanforsure@gmail.com",
+        "subject": "Post Published Successfully",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Post Failed</title>\n  <style>\n    body {\n      font-family: 'Segoe UI', Roboto, Arial, sans-serif;\n      background-color: #f5f7fa;\n      margin: 0;\n      padding: 0;\n    }\n    .container {\n      background-color: #ffffff;\n      max-width: 600px;\n      margin: 40px auto;\n      border-radius: 12px;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.08);\n      overflow: hidden;\n    }\n    .header {\n      background-color: #d63031;\n      color: #ffffff;\n      text-align: center;\n      padding: 25px 0;\n    }\n    .header h2 {\n      margin: 0;\n      font-size: 22px;\n    }\n    .content {\n      padding: 25px;\n      text-align: center;\n    }\n    .content img {\n      max-width: 100%;\n      border-radius: 10px;\n      margin-bottom: 20px;\n      opacity: 0.9;\n    }\n    .caption {\n      font-size: 16px;\n      color: #333;\n      margin-bottom: 20px;\n      line-height: 1.5;\n    }\n    .error-box {\n      background-color: #ffe3e3;\n      border: 1px solid #ff6b6b;\n      color: #b71c1c;\n      padding: 12px 16px;\n      border-radius: 6px;\n      text-align: left;\n      font-size: 14px;\n      margin-bottom: 25px;\n      word-wrap: break-word;\n    }\n    .button {\n      display: inline-block;\n      background-color: #0984e3;\n      color: white;\n      text-decoration: none;\n      padding: 12px 24px;\n      border-radius: 6px;\n      font-weight: 500;\n    }\n    .footer {\n      text-align: center;\n      font-size: 13px;\n      color: #888;\n      padding: 20px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h2>⚠️ Post Failed to Publish</h2>\n    </div>\n    <div class=\"content\">\n      <img src=\"{{ $('Set Data for Mail1').item.json.url }}\" alt=\"Failed Post Image\" />\n      <p class=\"caption\">{{ $('Set Data for Mail1').item.json.caption }}</p>\n\n\n      \n    </div>\n    </div>\n  </div>\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1760,
+        -8
+      ],
+      "id": "82e27184-82a8-4604-b284-df2c9fe38372",
+      "name": "Send a message1",
+      "webhookId": "a14f9035-ce25-426a-a47c-ec609babb713",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "xZeyCP3RP745PL0L",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "formTitle": "Generate Content",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Topic",
+              "placeholder": "Enter Topic",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Caption",
+              "fieldType": "textarea",
+              "placeholder": "Enter Caption or Leave Blank for AI"
+            },
+            {
+              "fieldLabel": "data",
+              "fieldType": "file",
+              "multipleFiles": false
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.3,
+      "position": [
+        -1504,
+        284
+      ],
+      "id": "d2eb7c29-86ba-4e0b-b11b-ba68c29c926e",
+      "name": "Data Form",
+      "webhookId": "9fd5f2f6-e07d-42b0-9b02-69b540f7c815"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=You are a creative social media copywriter. Write a short and catchy Social Media caption about the topic: \"{{ $('Data Form').item.json.Topic }}\".  \nKeep it natural, human-like, and engaging.  \nUse under 100 words.  \nDo not include hashtags or emojis.  \nOutput only the caption text, nothing else.\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        140
+      ],
+      "id": "e9cdcb74-f890-4b93-98df-64248be891f7",
+      "name": "Generate Caption"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"url\": \"{{ $json.url }}\",\n  \"caption\": \"{{ $json.CaptionSet }}\"\n}\n",
+        "options": {
+          "dotNotation": false
+        }
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        640,
+        -128
+      ],
+      "id": "b99cdf54-cc67-49b5-8b38-d276975658f5",
+      "name": "Set Data for Mail1"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "67ed9d9e-d199-4aa1-aa6c-9e204419dee6",
+              "leftValue": "={{ $('Data Form').item.json.Topic.toLowerCase() }}",
+              "rightValue": "how to",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "cb63cb4b-d81b-4f5a-881f-b549a26ed29c",
+              "leftValue": "={{ $('Data Form').item.json.Topic.toLowerCase() }}",
+              "rightValue": "learn",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "d173a08c-bcf8-411d-8c7d-4b8bf3557409",
+              "leftValue": "={{ $('Data Form').item.json.Topic.toLowerCase() }}",
+              "rightValue": "guide",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        92
+      ],
+      "id": "7ef28b7b-c944-4d9e-9901-a57aaccbc7cd",
+      "name": "Check Caption Type"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b1d6d583-4c33-4ad8-854a-ad15cd0e6f13",
+              "leftValue": "={{ $('Data Form').item.json.Caption }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "ca8863f7-b165-4942-8bd7-730de391665a",
+              "leftValue": "=",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -608,
+        140
+      ],
+      "id": "0d8724c1-de8e-4165-914b-517fb020008a",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "94e5ac22-b282-49be-bcc5-8f04fe731c9c",
+              "leftValue": "={{ $binary.data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1056,
+        720
+      ],
+      "id": "83f75e3d-4ee0-43ea-a520-98f1d89af90a",
+      "name": "If4"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "8823cbe7-5874-4674-a169-5c5ca2e24697",
+              "leftValue": "={{ $('Data Form').item.json.Caption }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "6c0ee72b-5c2a-4e15-ae72-0a3eadcc641e",
+              "leftValue": "={{ $('Data Form').item.json.data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -400,
+        544
+      ],
+      "id": "67c49ce7-698e-43b4-8c7e-cc66e7110cfe",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f5519acb-922e-464d-914c-51b89d54f4e6",
+              "leftValue": "={{ $('Data Form').item.json.data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        192,
+        140
+      ],
+      "id": "be766e67-50fd-470c-ae3e-32f332fc8fda",
+      "name": "If5"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "9097e0e6-041e-4ee0-a7a1-eb46b87ba73a",
+              "leftValue": "={{ $('Generate Caption').item.json || $('Data Form').item.json.Caption }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -384,
+        264
+      ],
+      "id": "bbf66850-528f-41be-9d40-df172ed79c43",
+      "name": "If6",
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://tempfile.org/api/upload/local",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "expiryHours",
+              "value": "1"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "files",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -832,
+        576
+      ],
+      "id": "527baaf2-c694-45aa-a9bd-e920e7a6ed48",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9f0cbd8a-a345-4e33-9796-c60746451b2a",
+              "name": "CaptionSet",
+              "value": "={{ $('Data Form').item.json.Caption || $('Generate Caption').item.json.output}}",
+              "type": "string"
+            },
+            {
+              "id": "d7e0fa6f-b2c5-41ba-82be-ec42d5869a29",
+              "name": "url",
+              "value": "={{ $('HTTP Request2').item.json.files[0].url+'preview' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        408
+      ],
+      "id": "fbb8ea69-55a6-481a-9bf8-66b81a0a2276",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "1a6999e2-5199-44f2-a1df-46c0f477e99c",
+              "leftValue": "={{ $json.Caption }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "empty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "9e4bf555-ac6a-4624-a330-1c087a08c4ec",
+              "leftValue": "={{ $json.data }}",
+              "rightValue": "",
+              "operator": {
+                "type": "object",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1280,
+        284
+      ],
+      "id": "f41dc0fb-c7e6-4ec3-9659-9aa6d129c8f6",
+      "name": "If7"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://tempfile.org/api/upload/local",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "expiryHours",
+              "value": "1"
+            },
+            {
+              "parameterType": "formBinaryData",
+              "name": "files",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -96,
+        -272
+      ],
+      "id": "fa1318d9-76f2-4278-b2b2-d82a3fe229af",
+      "name": "HTTP Request3"
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "value": "models/gemini-2.5-flash",
+          "mode": "list",
+          "cachedResultName": "models/gemini-2.5-flash"
+        },
+        "text": "You are an AI trained to write engaging and natural-sounding image captions for social media. \nLook at the image provided and describe it in a creative, human-like way that fits a social media caption style. \nKeep it short, catchy, and relevant to what’s visually happening in the image. \nAvoid robotic or overly descriptive tone. \nReturn only the caption text — no explanations.",
+        "imageUrls": "={{ $('HTTP Request3').item.json.files[0].url+'preview' }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.googleGemini",
+      "typeVersion": 1,
+      "position": [
+        192,
+        -272
+      ],
+      "id": "95e1393b-dcdd-465f-9956-c427970de293",
+      "name": "Analyze an image",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "80UTZNl6CRSjgELp",
+          "name": "Google Gemini(PaLM) Api account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9f0cbd8a-a345-4e33-9796-c60746451b2a",
+              "name": "CaptionSet",
+              "value": "={{ $json.content.parts[0].text }}",
+              "type": "string"
+            },
+            {
+              "id": "fc477c6c-4271-40da-b3c4-b36c88150291",
+              "name": "url",
+              "value": "={{ $('HTTP Request3').item.json.files[0].url+'preview' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        -272
+      ],
+      "id": "e823416d-ce92-43a1-b7c3-70f4484ccfff",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "sendTo": "amanforsure@gmail.com",
+        "subject": "Post Published Successfully",
+        "message": "=<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\" />\n  <title>Post Published Successfully</title>\n  <style>\n    body {\n      font-family: 'Segoe UI', Roboto, Arial, sans-serif;\n      background-color: #f5f7fa;\n      margin: 0;\n      padding: 0;\n    }\n    .container {\n      background-color: #ffffff;\n      max-width: 600px;\n      margin: 40px auto;\n      border-radius: 12px;\n      box-shadow: 0 2px 10px rgba(0,0,0,0.08);\n      overflow: hidden;\n    }\n    .header {\n      background-color: #00b894;\n      color: #ffffff;\n      text-align: center;\n      padding: 25px 0;\n    }\n    .header h2 {\n      margin: 0;\n      font-size: 22px;\n    }\n    .content {\n      padding: 25px;\n      text-align: center;\n    }\n    .content img {\n      max-width: 100%;\n      border-radius: 10px;\n      margin-bottom: 20px;\n    }\n    .caption {\n      font-size: 16px;\n      color: #333;\n      margin-bottom: 25px;\n      line-height: 1.6;\n    }\n    .button {\n      display: inline-block;\n      background-color: #0984e3;\n      color: white;\n      text-decoration: none;\n      padding: 12px 24px;\n      border-radius: 6px;\n      font-weight: 500;\n    }\n    .footer {\n      text-align: center;\n      font-size: 13px;\n      color: #888;\n      padding: 20px;\n    }\n  </style>\n</head>\n<body>\n  <div class=\"container\">\n    <div class=\"header\">\n      <h2>✅ Post Published Successfully</h2>\n    </div>\n    <div class=\"content\">\n      <img src=\"{{ $('Set Data for Mail1').item.json.url }}\" alt=\"Published Post Image\" />\n      <p class=\"caption\">{{ $('Set Data for Mail1').item.json.caption }}</p>\n\n      <p>Your post has been successfully published on Instagram.</p>\n    </div>\n  </div>\n</body>\n</html>\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1760,
+        -200
+      ],
+      "id": "59429b67-ef76-4ccc-a8ee-0603493d5fda",
+      "name": "Send a message",
+      "webhookId": "a14f9035-ce25-426a-a47c-ec609babb713",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "xZeyCP3RP745PL0L",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Generate Caption",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send message and wait for response": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Facebook Graph API",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Facebook Graph API": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If3": {
+      "main": [
+        [
+          {
+            "node": "Generate an image1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Data Form": {
+      "main": [
+        [
+          {
+            "node": "If7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Caption": {
+      "main": [
+        [
+          {
+            "node": "If5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Caption Type": {
+      "main": [
+        [
+          {
+            "node": "Generate an image1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "If6",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Set Data for Mail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If4": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Generate Caption",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Check Caption Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If5": {
+      "main": [
+        [
+          {
+            "node": "Check Caption Type",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If6": {
+      "main": [
+        [
+          {
+            "node": "Generate Caption",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Set Data for Mail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If7": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request3",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "If4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request3": {
+      "main": [
+        [
+          {
+            "node": "Analyze an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze an image": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Set Data for Mail1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Data for Mail1": {
+      "main": [
+        [
+          {
+            "node": "Send message and wait for response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "Asia/Kolkata",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false,
+    "executionTimeout": 1800
+  },
+  "versionId": "a43b8428-3366-48a3-93ae-9ca2ce5bbac3",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "38583251dfbf94974be57a309884f761fad1c431dbd32487595915339f2d88d6"
+  },
+  "id": "lTAemvoR09DuoJEE",
+  "tags": []
+}
